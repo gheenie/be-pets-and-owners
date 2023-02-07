@@ -153,6 +153,8 @@ app.delete('/api/pets/:petId', (req, res) => {
         res.status(200).send({ msg : 'Pet successfully deleted' });
     })
     .catch(err => {
+        console.log(err);
+
         res.status(404).send({ msg : 'Pet does not exist' });
     });
 });
@@ -187,6 +189,8 @@ app.delete('/api/owners/:ownerId', (req, res) => {
         res.status(200).send({ msg : 'Owner successfully deleted' });
     })
     .catch(err => {
+        console.log(err);
+
         res.status(404).send({msg : 'Owner does not exist'})
     });
 });
