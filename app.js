@@ -127,5 +127,42 @@ app.delete('/api/pets/:id', (req, res) => {
     .catch((err) => res.status(404).send({msg : 'Pet does not exist'}))
 });
 
+app.delete('/api/owners/:id', (req, res) => {
+    const {id} = req.params;
+    
+    fs.unlink(`${__dirname}/data/owners/${id}.json`)
+    .then(() =>{
+        return fs.readdir(`${__dirname}/data/pets`)
+    })
+    .then((filesOfPets) => {
+        const promisesToReadPets = filesOfPets.map((fileOfPets) => {
+            return fs.readFile(`${__dirname}/data/pets/${fileOfPets}`);
+        });
+        
+        return Promise.all(promisesToReadPets);
+    })
+    .then((resultsOfReadingFiles) => {
+        const ownedPetsIds = resultsOfReadingFiles.map((pet) =>{
+            return JSON.parse(pet);
+        }).filter(pet =>{
+            return pet.owner === id
+        }).map(pet =>{
+            return pet.id
+        })
+
+        const promisesToDeletePets = ownedPetsIds.map(ownedPetsId =>{
+            return fs.unlink(`${__dirname}/data/pets/${ownedPetsId}.json`)
+        })
+        return Promise.all(promisesToDeletePets)
+    })
+    .then(() => {
+        res.status(202).send({ msg : 'Owner successfully deleted' });
+    })
+    .catch((err) => res.status(404).send({msg : 'Owner does not exist'}))
+
+});
+
+
+
 
 module.exports = app;
