@@ -78,3 +78,17 @@ GET /pets/:id
 Considerations:
 
 responds with the data of the relevant pet
+
+Task 6
+This is the first time you will need to process the request body... don't forget to use express.json() to access the request body!
+
+In the next set of tasks you will have to think about what an appropriate url should be for this endpoint
+
+Build the following endpoint:
+
+PATCH
+Considerations:​
+
+Update an owners name and age
+What does a request need
+What should a response look like

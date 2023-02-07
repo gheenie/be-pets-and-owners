@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const fs = require('fs/promises');
 
+app.use(express.json());
+
 app.get('/api/owners/:id', (req, res) => {
     const {id} = req.params;
     
@@ -96,5 +98,19 @@ app.get('/api/pets/:id', (req, res) => {
     });
 });
 
+
+app.patch('/api/owners/:id', (req, res) => {
+    const {id} = req.params;
+    
+    fs.readFile(`${__dirname}/data/owners/${id}.json`)
+    .then((owner) => {
+        const parsedOwner = JSON.parse(owner);
+        const { name, age } = req.body
+        parsedOwner.name = name
+        parsedOwner.age = age
+        
+        res.status(200).send({ owner: parsedOwner });
+    });
+});
 
 module.exports = app;
