@@ -103,3 +103,15 @@ Considerations:
 
     Must be the same format as the existing data (contain the same information), you should check the other owner files for this.
     Use a timestamp for the id (Date.now() might be useful), affixed with the relevant letter, "o" to avoid overwriting an existing file
+
+Task 8
+POSTing a pet to an owner
+
+Build the following endpoint:
+POST: add a pet to an owner - /owners/:id/pets
+
+Considerations:
+
+    An owner must exist to be able to post a pet to them
+    Data must be the same format as the existing data (contain the same information), you should check the other pet files for this.
+    Use a timestamp for the id (Date.now() might be useful), affixed with the relevant letter, "p" to avoid overwriting an existing file

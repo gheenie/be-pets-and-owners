@@ -51,7 +51,6 @@ app.get('/api/owners/:id/pets', (req, res) =>{
         
         res.status(200).send({ pets : ownerPet });
     });
-
 })
 
 app.get('/api/pets', (req, res) =>{
@@ -113,7 +112,38 @@ app.post('/api/owners', (req, res) => {
 
     fs.writeFile(`${__dirname}/data/owners/${id}.json`, JSON.stringify(addingOwner))
     .then(() => {
-        res.status(202).send({ owner: addingOwner });
+        res.status(201).send({ owner: addingOwner });
+    });
+});
+
+app.post('/api/owners/:id/pets', (req, res) => {
+    fs.readdir(`${__dirname}/data/owners`)
+    .then((filesOfOwners) => {
+        const promisesToReadOwners = filesOfOwners.map((fileOfOwner) => {
+            return fs.readFile(`${__dirname}/data/owners/${fileOfOwner}`);
+        });
+        
+        return Promise.all(promisesToReadOwners);
+    })
+    .then((resultsOfReadingFiles) => {
+        const ownerIds = resultsOfReadingFiles.map((owner) => {
+            const ownerJSON = JSON.parse(owner);
+            return ownerJSON.id;
+        });
+        
+        const pet = req.body;
+        
+        if ( ownerIds.includes(pet.owner) ) {
+            const id = `p${Date.now()}`;
+            const addingPet = { id, ...pet };
+
+            fs.writeFile(`${__dirname}/data/pets/${id}.json`, JSON.stringify(addingPet))
+            .then(() => {
+                res.status(201).send({ pet: addingPet });
+            });
+        } else {
+            res.status(404).send({ msg: 'Owner not found.' })
+        }
     });
 });
 
