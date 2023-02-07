@@ -5,7 +5,7 @@ const fs = require('fs/promises');
 app.get('/api/owners/:id', (req, res) => {
     const {id} = req.params;
     
-    fs.readFile(`${__dirname}/data/owners/o${id}.json`)
+    fs.readFile(`${__dirname}/data/owners/${id}.json`)
     .then((owner) => {
         const parsedOwner = JSON.parse(owner);
         
@@ -32,5 +32,31 @@ app.get('/api/owners', (req, res) => {
         res.status(200).send({ owners });
     });
 });
+
+app.get('/api/owners/:id/pets', (req, res) =>{
+    const { id } = req.params
+    fs.readdir(`${__dirname}/data/pets`)
+    .then((filesOfPets) => {
+        const promisesToReadPets = [];
+
+        filesOfPets.forEach((fileOfPets) => {
+            promisesToReadPets.push( fs.readFile(`${__dirname}/data/Pets/${fileOfPets}`) );
+        });
+        
+        return Promise.all(promisesToReadPets);
+    })
+    .then((resultsOfReadingFiles) => {
+        const pets = [];
+
+        resultsOfReadingFiles.forEach((pet) => pets.push( JSON.parse(pet) ));
+
+        const ownerPet = pets.filter(pet =>{
+            return pet.owner === id
+        })
+        
+        res.status(200).send({ pets : ownerPet });
+    });
+
+})
 
 module.exports = app;

@@ -58,3 +58,10 @@ GET /owners
 Considerations:
 
     responds with an array containing the data of every owner (hint: you will need to use fs.readdir to read all of the file names in the owners folder)
+
+
+Task 3
+GET /owners/:id/pets
+Considerations:
+
+responds with an array containing the data of all pets belonging to the relevant owner
