@@ -92,3 +92,14 @@ Considerations:​
 Update an owners name and age
 What does a request need
 What should a response look like
+
+Task 7
+POSTing a new owner
+
+Build the following endpoint:
+POST: add an owner
+
+Considerations:
+
+    Must be the same format as the existing data (contain the same information), you should check the other owner files for this.
+    Use a timestamp for the id (Date.now() might be useful), affixed with the relevant letter, "o" to avoid overwriting an existing file

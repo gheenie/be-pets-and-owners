@@ -33,6 +33,7 @@ app.get('/api/owners', (req, res) => {
 
 app.get('/api/owners/:id/pets', (req, res) =>{
     const { id } = req.params
+
     fs.readdir(`${__dirname}/data/pets`)
     .then((filesOfPets) => {
         const promisesToReadPets = filesOfPets.map((fileOfPets) => {
@@ -55,6 +56,7 @@ app.get('/api/owners/:id/pets', (req, res) =>{
 
 app.get('/api/pets', (req, res) =>{
     const { temperament } = req.query;
+
     fs.readdir(`${__dirname}/data/pets`)
     .then((filesOfPets) => {
         const promisesToReadPets = filesOfPets.map((fileOfPets) => {
@@ -67,6 +69,8 @@ app.get('/api/pets', (req, res) =>{
         const pets = resultsOfReadingFiles.map((pet) => JSON.parse(pet));
 
         // if else no parameters?
+        //if (temperament === undefined) res.status(200).send({ pets });
+
         const queryPet = pets.filter(pet =>{
             return pet.temperament === temperament
         })
@@ -87,7 +91,6 @@ app.get('/api/pets/:id', (req, res) => {
     });
 });
 
-
 app.patch('/api/owners/:id', (req, res) => {
     const {id} = req.params;
     
@@ -98,7 +101,19 @@ app.patch('/api/owners/:id', (req, res) => {
         parsedOwner.name = name
         parsedOwner.age = age
         
-        res.status(200).send({ owner: parsedOwner });
+        res.status(202).send({ owner: parsedOwner });
+    });
+});
+
+app.post('/api/owners', (req, res) => {
+    const owner = req.body;
+    const id = `o${Date.now()}`;
+    // Only a shallow copy.
+    const addingOwner = { id, ...owner };
+
+    fs.writeFile(`${__dirname}/data/owners/${id}.json`, JSON.stringify(addingOwner))
+    .then(() => {
+        res.status(202).send({ owner: addingOwner });
     });
 });
 
