@@ -59,4 +59,30 @@ app.get('/api/owners/:id/pets', (req, res) =>{
 
 })
 
+app.get('/api/pets', (req, res) =>{
+    const { temperament } = req.query;
+    fs.readdir(`${__dirname}/data/pets`)
+    .then((filesOfPets) => {
+        const promisesToReadPets = [];
+
+        filesOfPets.forEach((fileOfPets) => {
+            promisesToReadPets.push( fs.readFile(`${__dirname}/data/Pets/${fileOfPets}`) );
+        });
+        
+        return Promise.all(promisesToReadPets);
+    })
+    .then((resultsOfReadingFiles) => {
+        const pets = [];
+
+        resultsOfReadingFiles.forEach((pet) => pets.push( JSON.parse(pet) ));
+
+        const queryPet = pets.filter(pet =>{
+            return pet.temperament === temperament
+        })
+        
+        res.status(200).send({ pets : queryPet });
+    });
+
+})
+
 module.exports = app;
