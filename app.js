@@ -195,7 +195,4 @@ app.delete('/api/owners/:ownerId', (req, res) => {
     });
 });
 
-
-
-
 module.exports = app;
