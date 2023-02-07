@@ -103,3 +103,13 @@ Considerations:
 
     Must be the same format as the existing data (contain the same information), you should check the other owner files for this.
     Use a timestamp for the id (Date.now() might be useful), affixed with the relevant letter, "o" to avoid overwriting an existing file
+
+Task 8
+DELETEing Pets
+Build the following endpoint:
+
+DELETE: remove a pet from the data
+Considerations:
+
+Which pet should be removed?
+What should a response look like?

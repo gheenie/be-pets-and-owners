@@ -117,4 +117,15 @@ app.post('/api/owners', (req, res) => {
     });
 });
 
+app.delete('/api/pets/:id', (req, res) => {
+    const {id} = req.params;
+    
+    fs.unlink(`${__dirname}/data/pets/${id}.json`)
+    .then(() => {
+        res.status(202).send({ msg : 'Pet successfully deleted' });
+    })
+    .catch((err) => res.status(404).send({msg : 'Pet does not exist'}))
+});
+
+
 module.exports = app;
