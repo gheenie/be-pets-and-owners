@@ -180,18 +180,18 @@ app.delete('/api/owners/:ownerId', (req, res) => {
         .map(ownerPet => ownerPet.id);
 
         const promisesToDeletePets = ownerPetIds.map(ownerPetId => {
-            return fs.unlink(`${__dirname}/data/pets/${ownerPetId}.json`)
+            return fs.unlink(`${__dirname}/data/pets/${ownerPetId}.json`);
         });
 
         return Promise.all(promisesToDeletePets);
     })
     .then(() => {
-        res.status(200).send({ msg : 'Owner successfully deleted' });
+        res.status(200).send({ msg : 'Owner and her pets successfully deleted' });
     })
     .catch(err => {
         console.log(err);
 
-        res.status(404).send({msg : 'Owner does not exist'})
+        res.status(404).send({ msg : 'Owner does not exist' })
     });
 });
 
