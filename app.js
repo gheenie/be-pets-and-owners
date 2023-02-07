@@ -83,6 +83,18 @@ app.get('/api/pets', (req, res) =>{
         res.status(200).send({ pets : queryPet });
     });
 
-})
+});
+
+app.get('/api/pets/:id', (req, res) => {
+    const {id} = req.params;
+    
+    fs.readFile(`${__dirname}/data/pets/${id}.json`)
+    .then((pets) => {
+        const parsedpets = JSON.parse(pets);
+        
+        res.status(200).send({ pets: parsedpets });
+    });
+});
+
 
 module.exports = app;

@@ -65,3 +65,16 @@ GET /owners/:id/pets
 Considerations:
 
 responds with an array containing the data of all pets belonging to the relevant owner
+
+Task 4
+GET /pets
+Considerations:
+
+responds with an array containing all of the pets' data.
+This endpoint should accept a query of temperament so that users can filter pets by their temperament, e.g. GET /api/pets?temperament=grumpy responds with an array containing all the pets with a temperament of grumpy
+
+Task 5
+GET /pets/:id
+Considerations:
+
+responds with the data of the relevant pet
