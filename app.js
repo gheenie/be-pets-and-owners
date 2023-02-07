@@ -1,14 +1,14 @@
 const express = require('express');
-const app = express();
 const fs = require('fs/promises');
 
+const app = express();
 app.use(express.json());
 
-app.get('/api/owners/:id', (req, res) => {
-    const {id} = req.params;
+app.get('/api/owners/:ownerId', (req, res) => {
+    const { ownerId } = req.params;
     
-    fs.readFile(`${__dirname}/data/owners/${id}.json`)
-    .then((owner) => {
+    fs.readFile(`${__dirname}/data/owners/${ownerId}.json`)
+    .then(owner => {
         const parsedOwner = JSON.parse(owner);
         
         res.status(200).send({ owner: parsedOwner });
@@ -17,128 +17,124 @@ app.get('/api/owners/:id', (req, res) => {
 
 app.get('/api/owners', (req, res) => {
     fs.readdir(`${__dirname}/data/owners`)
-    .then((filesOfOwners) => {
-        const promisesToReadOwners = filesOfOwners.map((fileOfOwner) => {
+    .then(filesOfOwners => {
+        const promisesToReadOwners = filesOfOwners.map(fileOfOwner => {
             return fs.readFile(`${__dirname}/data/owners/${fileOfOwner}`);
         });
         
         return Promise.all(promisesToReadOwners);
     })
-    .then((resultsOfReadingFiles) => {
-        const owners = resultsOfReadingFiles.map((owner) => JSON.parse(owner));
+    .then(readOwners => {
+        const owners = readOwners.map(readOwner => JSON.parse(readOwner));
         
         res.status(200).send({ owners });
     });
 });
 
-app.get('/api/owners/:id/pets', (req, res) =>{
-    const { id } = req.params
+app.get('/api/owners/:ownerId/pets', (req, res) =>{
+    const { ownerId } = req.params
 
     fs.readdir(`${__dirname}/data/pets`)
-    .then((filesOfPets) => {
-        const promisesToReadPets = filesOfPets.map((fileOfPets) => {
-            return fs.readFile(`${__dirname}/data/pets/${fileOfPets}`);
+    .then(filesOfPets => {
+        const promisesToReadPets = filesOfPets.map(fileOfPet => {
+            return fs.readFile(`${__dirname}/data/pets/${fileOfPet}`);
         });
         
         return Promise.all(promisesToReadPets);
     })
-    .then((resultsOfReadingFiles) => {
-        const pets = resultsOfReadingFiles.map((pet) => JSON.parse(pet));
-
-        const ownerPet = pets.filter(pet =>{
-            return pet.owner === id
-        })
+    .then(readPets => {
+        const pets = readPets.map(readPet => JSON.parse(readPet));
         
-        res.status(200).send({ pets : ownerPet });
+        const ownerPets = pets.filter(pet => pet.owner === ownerId);
+        
+        res.status(200).send({ pets : ownerPets });
     });
-})
+});
 
 app.get('/api/pets', (req, res) =>{
     const { temperament } = req.query;
 
     fs.readdir(`${__dirname}/data/pets`)
-    .then((filesOfPets) => {
-        const promisesToReadPets = filesOfPets.map((fileOfPets) => {
-            return fs.readFile(`${__dirname}/data/pets/${fileOfPets}`);
+    .then(filesOfPets => {
+        const promisesToReadPets = filesOfPets.map(fileOfPet => {
+            return fs.readFile(`${__dirname}/data/pets/${fileOfPet}`);
         });
         
         return Promise.all(promisesToReadPets);
     })
-    .then((resultsOfReadingFiles) => {
-        const pets = resultsOfReadingFiles.map((pet) => JSON.parse(pet));
+    .then(readPets => {
+        const pets = readPets.map(readPet => JSON.parse(readPet));
 
-        // if else no parameters?
-        //if (temperament === undefined) res.status(200).send({ pets });
-
-        const queryPet = pets.filter(pet =>{
-            return pet.temperament === temperament
-        })
+        //if (temperament !== undefined) ?
+        const queriedPets = pets.filter(pet => pet.temperament === temperament);
         
-        res.status(200).send({ pets : queryPet });
-    });
+        res.status(200).send({ pets : queriedPets });
 
-});
-
-app.get('/api/pets/:id', (req, res) => {
-    const {id} = req.params;
-    
-    fs.readFile(`${__dirname}/data/pets/${id}.json`)
-    .then((pets) => {
-        const parsedpets = JSON.parse(pets);
-        
-        res.status(200).send({ pets: parsedpets });
+        //default logic?
     });
 });
 
-app.patch('/api/owners/:id', (req, res) => {
-    const {id} = req.params;
+app.get('/api/pets/:petId', (req, res) => {
+    const { petId } = req.params;
     
-    fs.readFile(`${__dirname}/data/owners/${id}.json`)
-    .then((owner) => {
-        const parsedOwner = JSON.parse(owner);
+    fs.readFile(`${__dirname}/data/pets/${petId}.json`)
+    .then(pet => {
+        const parsedPet = JSON.parse(pet);
+        
+        res.status(200).send({ pet: parsedPet });
+    });
+});
+
+app.patch('/api/owners/:ownerId', (req, res) => {
+    const { ownerId } = req.params;
+    
+    fs.readFile(`${__dirname}/data/owners/${ownerId}.json`)
+    .then(readOwner => {
+        const owner = JSON.parse(readOwner);
         const { name, age } = req.body
-        parsedOwner.name = name
-        parsedOwner.age = age
+
+        owner.name = name
+        owner.age = age
         
-        res.status(202).send({ owner: parsedOwner });
+        // Update actual file?
+
+        res.status(200).send({ owner });
     });
 });
 
 app.post('/api/owners', (req, res) => {
     const owner = req.body;
-    const id = `o${Date.now()}`;
+    const ownerId = `o${Date.now()}`;
     // Only a shallow copy.
-    const addingOwner = { id, ...owner };
+    const addingOwner = { ownerId, ...owner };
 
-    fs.writeFile(`${__dirname}/data/owners/${id}.json`, JSON.stringify(addingOwner))
+    fs.writeFile(`${__dirname}/data/owners/${ownerId}.json`, JSON.stringify(addingOwner))
     .then(() => {
         res.status(201).send({ owner: addingOwner });
     });
 });
 
+// Refactor to use catch?
 app.post('/api/owners/:id/pets', (req, res) => {
     fs.readdir(`${__dirname}/data/owners`)
-    .then((filesOfOwners) => {
-        const promisesToReadOwners = filesOfOwners.map((fileOfOwner) => {
+    .then(filesOfOwners => {
+        const promisesToReadOwners = filesOfOwners.map(fileOfOwner => {
             return fs.readFile(`${__dirname}/data/owners/${fileOfOwner}`);
         });
         
         return Promise.all(promisesToReadOwners);
     })
-    .then((resultsOfReadingFiles) => {
-        const ownerIds = resultsOfReadingFiles.map((owner) => {
-            const ownerJSON = JSON.parse(owner);
-            return ownerJSON.id;
-        });
+    .then(readOwners => {
+        const ownerIds = readOwners.map(readOwner => JSON.parse(readOwner).id);
         
         const pet = req.body;
         
         if ( ownerIds.includes(pet.owner) ) {
-            const id = `p${Date.now()}`;
+            const petId = `p${Date.now()}`;
             // Only a shallow copy.
-            const addingPet = { id, ...pet };
+            const addingPet = { petId, ...pet };
 
-            fs.writeFile(`${__dirname}/data/pets/${id}.json`, JSON.stringify(addingPet))
+            fs.writeFile(`${__dirname}/data/pets/${petId}.json`, JSON.stringify(addingPet))
             .then(() => {
                 res.status(201).send({ pet: addingPet });
             });
@@ -148,49 +144,51 @@ app.post('/api/owners/:id/pets', (req, res) => {
     });
 });
 
-app.delete('/api/pets/:id', (req, res) => {
-    const {id} = req.params;
+// Use petId in url or /api/pets with body provided by client?
+app.delete('/api/pets/:petId', (req, res) => {
+    const { petId } = req.params;
     
-    fs.unlink(`${__dirname}/data/pets/${id}.json`)
+    fs.unlink(`${__dirname}/data/pets/${petId}.json`)
     .then(() => {
-        res.status(202).send({ msg : 'Pet successfully deleted' });
+        res.status(200).send({ msg : 'Pet successfully deleted' });
     })
-    .catch((err) => res.status(404).send({msg : 'Pet does not exist'}))
+    .catch(err => {
+        res.status(404).send({ msg : 'Pet does not exist' });
+    });
 });
 
-app.delete('/api/owners/:id', (req, res) => {
-    const {id} = req.params;
+// Use ownerId in url or /api/owners with body provided by client?
+app.delete('/api/owners/:ownerId', (req, res) => {
+    const { ownerId } = req.params;
     
-    fs.unlink(`${__dirname}/data/owners/${id}.json`)
+    fs.unlink(`${__dirname}/data/owners/${ownerId}.json`)
     .then(() =>{
-        return fs.readdir(`${__dirname}/data/pets`)
+        return fs.readdir(`${__dirname}/data/pets`);
     })
-    .then((filesOfPets) => {
-        const promisesToReadPets = filesOfPets.map((fileOfPets) => {
-            return fs.readFile(`${__dirname}/data/pets/${fileOfPets}`);
+    .then(filesOfPets => {
+        const promisesToReadPets = filesOfPets.map(fileOfPet => {
+            return fs.readFile(`${__dirname}/data/pets/${fileOfPet}`);
         });
         
         return Promise.all(promisesToReadPets);
     })
-    .then((resultsOfReadingFiles) => {
-        const ownedPetsIds = resultsOfReadingFiles.map((pet) =>{
-            return JSON.parse(pet);
-        }).filter(pet =>{
-            return pet.owner === id
-        }).map(pet =>{
-            return pet.id
-        })
+    .then(readPets => {
+        const ownerPetIds = readPets.map(readPet => JSON.parse(readPet))
+        .filter(pet => pet.owner === ownerId)
+        .map(ownerPet => ownerPet.id);
 
-        const promisesToDeletePets = ownedPetsIds.map(ownedPetsId =>{
-            return fs.unlink(`${__dirname}/data/pets/${ownedPetsId}.json`)
-        })
-        return Promise.all(promisesToDeletePets)
+        const promisesToDeletePets = ownerPetIds.map(ownerPetId => {
+            return fs.unlink(`${__dirname}/data/pets/${ownerPetId}.json`)
+        });
+
+        return Promise.all(promisesToDeletePets);
     })
     .then(() => {
-        res.status(202).send({ msg : 'Owner successfully deleted' });
+        res.status(200).send({ msg : 'Owner successfully deleted' });
     })
-    .catch((err) => res.status(404).send({msg : 'Owner does not exist'}))
-
+    .catch(err => {
+        res.status(404).send({msg : 'Owner does not exist'})
+    });
 });
 
 
