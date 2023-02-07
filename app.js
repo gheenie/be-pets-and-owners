@@ -135,6 +135,7 @@ app.post('/api/owners/:id/pets', (req, res) => {
         
         if ( ownerIds.includes(pet.owner) ) {
             const id = `p${Date.now()}`;
+            // Only a shallow copy.
             const addingPet = { id, ...pet };
 
             fs.writeFile(`${__dirname}/data/pets/${id}.json`, JSON.stringify(addingPet))
