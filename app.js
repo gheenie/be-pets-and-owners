@@ -13,4 +13,24 @@ app.get('/api/owners/:id', (req, res) => {
     });
 });
 
+app.get('/api/owners', (req, res) => {
+    fs.readdir(`${__dirname}/data/owners`)
+    .then((filesOfOwners) => {
+        const promisesToReadOwners = [];
+
+        filesOfOwners.forEach((fileOfOwner) => {
+            promisesToReadOwners.push( fs.readFile(`${__dirname}/data/owners/${fileOfOwner}`) );
+        });
+        
+        return Promise.all(promisesToReadOwners);
+    })
+    .then((resultsOfReadingFiles) => {
+        const owners = [];
+
+        resultsOfReadingFiles.forEach((owner) => owners.push( JSON.parse(owner) ));
+        
+        res.status(200).send({ owners });
+    });
+});
+
 module.exports = app;
