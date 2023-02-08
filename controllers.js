@@ -48,10 +48,27 @@ const getPet = (req, res) => {
     });
 };
 
+const updateOwner = (req, res) => {
+    const { ownerId } = req.params;
+
+    fetchOwner(ownerId)
+    .then(owner => {
+        const { name, age } = req.body;
+
+        owner.name = name;
+        owner.age = age;
+        
+        // Update actual file?
+
+        res.status(200).send({ owner });
+    });
+};
+
 module.exports = {
     getOwner,
     getAllOwners,
     getOwnerPets,
     getAllPets,
-    getPet
+    getPet,
+    updateOwner
 };

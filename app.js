@@ -1,6 +1,13 @@
 const express = require('express');
 const fs = require('fs/promises');
-const { getOwner, getAllOwners, getOwnerPets, getAllPets, getPet } = require('./controllers');
+const { 
+    getOwner, 
+    getAllOwners, 
+    getOwnerPets, 
+    getAllPets, 
+    getPet, 
+    updateOwner 
+} = require('./controllers');
 
 const app = express();
 app.use(express.json());
@@ -15,22 +22,7 @@ app.get('/api/pets', getAllPets);
 
 app.get('/api/pets/:petId', getPet);
 
-app.patch('/api/owners/:ownerId', (req, res) => {
-    const { ownerId } = req.params;
-    
-    fs.readFile(`${__dirname}/data/owners/${ownerId}.json`)
-    .then(readOwner => {
-        const owner = JSON.parse(readOwner);
-        const { name, age } = req.body
-
-        owner.name = name
-        owner.age = age
-        
-        // Update actual file?
-
-        res.status(200).send({ owner });
-    });
-});
+app.patch('/api/owners/:ownerId', updateOwner);
 
 app.post('/api/owners', (req, res) => {
     const owner = req.body;
