@@ -182,7 +182,7 @@ Creating a log
 Take some time to read the documents and then work on the functionality
 Build some logging middleware
 
-Take some time to read about application middleware
+Take some time to read about application middleware http://expressjs.com/en/guide/using-middleware.html#middleware.application
 
 Create log.txt file in the root directory and a logger middleware function that writes the following to the bottom of the log file:
 
@@ -195,7 +195,7 @@ Create log.txt file in the root directory and a logger middleware function that 
 Task 12
 Error handling
 
-Read about Error Handling.
+Read about Error Handling. http://expressjs.com/en/guide/error-handling.html
 Add some error handling
 
 Add some error handling to your routes. Think about how the user could make a bad request to your endpoints and respond with an appropriate status code.
@@ -229,6 +229,6 @@ Task 14
 Views
 
 Now its time to add some views to your application
-Templating Engines
+Templating Engines 
 
-Add some views to your application to present your data in a more user friendly format. The express docs have a guide on templating engines which is a nice place to start. Do some research into the available options and think about the different endpoints you have available.
+Add some views to your application to present your data in a more user friendly format. The express docs have a guide on templating engines https://expressjs.com/en/guide/using-template-engines.html which is a nice place to start. Do some research into the available options and think about the different endpoints you have available.
