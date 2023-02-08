@@ -2,8 +2,8 @@ const fs = require('fs/promises');
 
 const fetchOwner = ownerId => {
     return fs.readFile(`${__dirname}/data/owners/${ownerId}.json`)
-    .then(owner => {
-        return JSON.parse(owner);
+    .then(readOwner => {
+        return JSON.parse(readOwner);
     });
 };
 
@@ -37,8 +37,8 @@ const fetchAllPets = () => {
 
 const fetchPet = petId => {
     return fs.readFile(`${__dirname}/data/pets/${petId}.json`)
-    .then(pet => {
-        return JSON.parse(pet);
+    .then(readPet => {
+        return JSON.parse(readPet);
     });
 };
 
