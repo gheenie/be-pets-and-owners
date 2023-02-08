@@ -177,4 +177,15 @@ Considerations:
 
 
 Task 11
+Creating a log
 
+Take some time to read the documents and then work on the functionality
+Build some logging middleware
+
+Take some time to read about application middleware
+
+Create log.txt file in the root directory and a logger middleware function that writes the following to the bottom of the log file:
+
+    request method
+    requested url
+    time of the request
