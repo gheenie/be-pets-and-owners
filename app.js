@@ -1,19 +1,11 @@
 const express = require('express');
 const fs = require('fs/promises');
+const { getOwners } = require('./controllers');
 
 const app = express();
 app.use(express.json());
 
-app.get('/api/owners/:ownerId', (req, res) => {
-    const { ownerId } = req.params;
-    
-    fs.readFile(`${__dirname}/data/owners/${ownerId}.json`)
-    .then(owner => {
-        const parsedOwner = JSON.parse(owner);
-        
-        res.status(200).send({ owner: parsedOwner });
-    });
-});
+app.get('/api/owners/:ownerId', getOwners);
 
 app.get('/api/owners', (req, res) => {
     fs.readdir(`${__dirname}/data/owners`)
@@ -144,7 +136,6 @@ app.post('/api/owners/:id/pets', (req, res) => {
     });
 });
 
-// Use petId in url or /api/pets with body provided by client?
 app.delete('/api/pets/:petId', (req, res) => {
     const { petId } = req.params;
     
@@ -159,7 +150,6 @@ app.delete('/api/pets/:petId', (req, res) => {
     });
 });
 
-// Use ownerId in url or /api/owners with body provided by client?
 app.delete('/api/owners/:ownerId', (req, res) => {
     const { ownerId } = req.params;
     
