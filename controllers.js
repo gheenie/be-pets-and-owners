@@ -26,7 +26,7 @@ const getOwnerPets = (req, res) => {
 
         ownerPets = pets.filter(pet => pet.owner === ownerId);
         
-        res.status(200).send({ pets : ownerPets });
+        res.status(200).send({ ownerPets });
     });
 };
 
@@ -50,9 +50,9 @@ const getQueriedPets = (req, res) => {
 const getPet = (req, res) => {
     const { petId } = req.params;
     
-    fetchPet(petId)
-    .then(parsedPet => {
-        res.status(200).send({ pet: parsedPet });
+    models.fetchPet(petId)
+    .then(pet => {
+        res.status(200).send({ pet });
     });
 };
 
@@ -75,12 +75,12 @@ const updateOwner = (req, res) => {
 const addOwner = (req, res) => {
     const owner = req.body;
     const ownerId = `o${Date.now()}`;
-    // Only a shallow copy.
+    // Only a shallow copy. lodash.cloneDeep then add prop?
     const addingOwner = { ownerId, ...owner };
 
     createOwner(ownerId, addingOwner)
     .then(() => {
-        res.status(201).send({ owner: addingOwner });
+        res.status(201).send({ addingOwner });
     });
 };
 
