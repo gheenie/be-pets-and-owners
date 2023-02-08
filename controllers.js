@@ -1,11 +1,12 @@
 const models = require('./models');
+const ld = require('lodash');
 
 const getOwner = (req, res) => {
     const { ownerId } = req.params;
     
     models.fetchOwner(ownerId)
-    .then(parsedOwner => {
-        res.status(200).send({ owner: parsedOwner });
+    .then(owner => {
+        res.status(200).send({ owner });
     });
 }
 
@@ -17,27 +18,32 @@ const getAllOwners = (req, res) => {
 };
 
 const getOwnerPets = (req, res) => {
-    const { ownerId } = req.params
+    const { ownerId } = req.params;
 
     models.fetchAllPets()
     .then(pets => {
-        const ownerPets = pets.filter(pet => pet.owner === ownerId);
+        const ownerPets = ld.cloneDeep(pets);
+
+        ownerPets = pets.filter(pet => pet.owner === ownerId);
         
         res.status(200).send({ pets : ownerPets });
     });
 };
 
 const getQueriedPets = (req, res) => {
-    const { temperament } = req.query;
+    const queries = req.query;
 
     models.fetchAllPets()
     .then(pets => {
-        //if (temperament !== undefined) ?
-        const queriedPets = pets.filter(pet => pet.temperament === temperament);
+        let queriedPets = ld.cloneDeep(pets);
+
+        if ( !ld.isEmpty(queries) ) {
+            for ( const [queryKey, queryValue] of Object.entries(queries) ) {
+                queriedPets = queriedPets.filter(pet => pet[queryKey] === queryValue);
+            }
+        }
         
         res.status(200).send({ pets : queriedPets });
-
-        //default logic?
     });
 };
 
