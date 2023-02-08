@@ -21,7 +21,7 @@ const fetchAllOwners = () => {
     });
 };
 
-const fetchOwnerPets = ownerId => {
+const fetchOwnerPets = () => {
     return fs.readdir(`${__dirname}/data/pets`)
     .then(filesOfPets => {
         const promisesToReadPets = filesOfPets.map(fileOfPet => {
@@ -31,9 +31,7 @@ const fetchOwnerPets = ownerId => {
         return Promise.all(promisesToReadPets);
     })
     .then(readPets => {
-        const pets = readPets.map(readPet => JSON.parse(readPet));
-        
-        return pets.filter(pet => pet.owner === ownerId);
+        return readPets.map(readPet => JSON.parse(readPet));
     });
 };
 

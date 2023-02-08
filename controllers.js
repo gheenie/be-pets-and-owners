@@ -26,8 +26,10 @@ const getAllOwners = (req, res) => {
 const getOwnerPets = (req, res) => {
     const { ownerId } = req.params
 
-    fetchOwnerPets(ownerId)
-    .then(ownerPets => {
+    fetchAllPets()
+    .then(pets => {
+        const ownerPets = pets.filter(pet => pet.owner === ownerId);
+        
         res.status(200).send({ pets : ownerPets });
     });
 };
