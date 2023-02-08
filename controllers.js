@@ -1,4 +1,4 @@
-const { fetchOwner } = require('./models');
+const { fetchOwner, fetchAllOwners } = require('./models');
 
 const getOwners = (req, res) => {
     const { ownerId } = req.params;
@@ -9,6 +9,14 @@ const getOwners = (req, res) => {
     });
 }
 
+const getAllOwners = (req, res) => {
+    fetchAllOwners()
+    .then(owners => {
+        res.status(200).send({ owners });
+    });
+};
+
 module.exports = {
-    getOwners
+    getOwners,
+    getAllOwners
 };

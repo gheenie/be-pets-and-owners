@@ -7,6 +7,21 @@ const fetchOwner = ownerId => {
      });
 };
 
+const fetchAllOwners = () => {
+    return fs.readdir(`${__dirname}/data/owners`)
+    .then(filesOfOwners => {
+        const promisesToReadOwners = filesOfOwners.map(fileOfOwner => {
+            return fs.readFile(`${__dirname}/data/owners/${fileOfOwner}`);
+        });
+        
+        return Promise.all(promisesToReadOwners);
+    })
+    .then(readOwners => {
+        return readOwners.map(readOwner => JSON.parse(readOwner));
+    });
+};
+
 module.exports = {
-    fetchOwner
+    fetchOwner,
+    fetchAllOwners
 }

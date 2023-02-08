@@ -1,27 +1,13 @@
 const express = require('express');
 const fs = require('fs/promises');
-const { getOwners } = require('./controllers');
+const { getOwners, getAllOwners } = require('./controllers');
 
 const app = express();
 app.use(express.json());
 
 app.get('/api/owners/:ownerId', getOwners);
 
-app.get('/api/owners', (req, res) => {
-    fs.readdir(`${__dirname}/data/owners`)
-    .then(filesOfOwners => {
-        const promisesToReadOwners = filesOfOwners.map(fileOfOwner => {
-            return fs.readFile(`${__dirname}/data/owners/${fileOfOwner}`);
-        });
-        
-        return Promise.all(promisesToReadOwners);
-    })
-    .then(readOwners => {
-        const owners = readOwners.map(readOwner => JSON.parse(readOwner));
-        
-        res.status(200).send({ owners });
-    });
-});
+app.get('/api/owners', getAllOwners);
 
 app.get('/api/owners/:ownerId/pets', (req, res) =>{
     const { ownerId } = req.params
