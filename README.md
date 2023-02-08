@@ -189,3 +189,46 @@ Create log.txt file in the root directory and a logger middleware function that 
     request method
     requested url
     time of the request
+
+
+
+Task 12
+Error handling
+
+Read about Error Handling.
+Add some error handling
+
+Add some error handling to your routes. Think about how the user could make a bad request to your endpoints and respond with an appropriate status code.
+
+Considerations:
+
+    Think about where you get input from the users and how this could lead to problems
+
+
+
+Task 13
+New Features
+
+Lets add some more complexity to some of the things you have already done.
+Amendments to the all pets endpoint
+
+Update the all pets endpoint (task 4) and allow it to accept the following queries
+
+    sort_by - user can choose to order the pets by:
+        id - should default to this when no query is given.
+        age
+        name
+    order - can accept asc or desc (defaults to asc when the query isn't given.)
+    max_age - user can choose to only bring pets younger than passed query
+    min_age - user can choose to only bring pets older than passed query
+    search - user can pass a searchTerm that will filter pets to only include those who have the searchTerm in any of their properties
+
+
+
+Task 14
+Views
+
+Now its time to add some views to your application
+Templating Engines
+
+Add some views to your application to present your data in a more user friendly format. The express docs have a guide on templating engines which is a nice place to start. Do some research into the available options and think about the different endpoints you have available.
