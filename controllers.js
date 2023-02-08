@@ -59,16 +59,17 @@ const getPet = (req, res) => {
 const updateOwner = (req, res) => {
     const { ownerId } = req.params;
 
-    fetchOwner(ownerId)
+    models.fetchOwner(ownerId)
     .then(owner => {
+        const updatedOwner = ld.cloneDeep(owner);
         const { name, age } = req.body;
 
-        owner.name = name;
-        owner.age = age;
+        updatedOwner.name = name;
+        updatedOwner.age = age;
         
-        // Update actual file?
+        // overwrite actual file?
 
-        res.status(200).send({ owner });
+        res.status(200).send({ updatedOwner });
     });
 };
 
@@ -78,7 +79,7 @@ const addOwner = (req, res) => {
     // Only a shallow copy. lodash.cloneDeep then add prop?
     const addingOwner = { ownerId, ...owner };
 
-    createOwner(ownerId, addingOwner)
+    models.createOwner(ownerId, addingOwner)
     .then(() => {
         res.status(201).send({ addingOwner });
     });
