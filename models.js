@@ -49,7 +49,6 @@ const createOwner = (ownerId, addingOwner) => {
 module.exports = {
     fetchOwner,
     fetchAllOwners,
-    fetchOwnerPets,
     fetchAllPets,
     fetchPet,
     createOwner

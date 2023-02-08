@@ -1,23 +1,16 @@
-const { 
-    fetchOwner, 
-    fetchAllOwners, 
-    fetchOwnerPets, 
-    fetchAllPets, 
-    fetchPet, 
-    createOwner
-} = require('./models');
+const models = require('./models');
 
 const getOwner = (req, res) => {
     const { ownerId } = req.params;
     
-    fetchOwner(ownerId)
+    models.fetchOwner(ownerId)
     .then(parsedOwner => {
         res.status(200).send({ owner: parsedOwner });
     });
 }
 
 const getAllOwners = (req, res) => {
-    fetchAllOwners()
+    models.fetchAllOwners()
     .then(owners => {
         res.status(200).send({ owners });
     });
@@ -26,7 +19,7 @@ const getAllOwners = (req, res) => {
 const getOwnerPets = (req, res) => {
     const { ownerId } = req.params
 
-    fetchAllPets()
+    models.fetchAllPets()
     .then(pets => {
         const ownerPets = pets.filter(pet => pet.owner === ownerId);
         
@@ -34,10 +27,10 @@ const getOwnerPets = (req, res) => {
     });
 };
 
-const getAllPets = (req, res) =>{
+const getQueriedPets = (req, res) => {
     const { temperament } = req.query;
 
-    fetchAllPets()
+    models.fetchAllPets()
     .then(pets => {
         //if (temperament !== undefined) ?
         const queriedPets = pets.filter(pet => pet.temperament === temperament);
@@ -89,7 +82,7 @@ module.exports = {
     getOwner,
     getAllOwners,
     getOwnerPets,
-    getAllPets,
+    getQueriedPets,
     getPet,
     updateOwner,
     addOwner

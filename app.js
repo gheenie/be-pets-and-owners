@@ -1,31 +1,23 @@
 const express = require('express');
 const fs = require('fs/promises');
-const { 
-    getOwner, 
-    getAllOwners, 
-    getOwnerPets, 
-    getAllPets, 
-    getPet, 
-    updateOwner, 
-    addOwner
-} = require('./controllers');
+const controllers = require('./controllers');
 
 const app = express();
 app.use(express.json());
 
-app.get('/api/owners/:ownerId', getOwner);
+app.get('/api/owners/:ownerId', controllers.getOwner);
 
-app.get('/api/owners', getAllOwners);
+app.get('/api/owners', controllers.getAllOwners);
 
-app.get('/api/owners/:ownerId/pets', getOwnerPets);
+app.get('/api/owners/:ownerId/pets', controllers.getOwnerPets);
 
-app.get('/api/pets', getAllPets);
+app.get('/api/pets', controllers.getQueriedPets);
 
-app.get('/api/pets/:petId', getPet);
+app.get('/api/pets/:petId', controllers.getPet);
 
-app.patch('/api/owners/:ownerId', updateOwner);
+app.patch('/api/owners/:ownerId', controllers.updateOwner);
 
-app.post('/api/owners', addOwner);
+app.post('/api/owners', controllers.addOwner);
 
 // Refactor to use catch?
 app.post('/api/owners/:id/pets', (req, res) => {
