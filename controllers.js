@@ -1,4 +1,11 @@
-const { fetchOwner, fetchAllOwners, fetchOwnerPets, fetchAllPets, fetchPet } = require('./models');
+const { 
+    fetchOwner, 
+    fetchAllOwners, 
+    fetchOwnerPets, 
+    fetchAllPets, 
+    fetchPet, 
+    createOwner
+} = require('./models');
 
 const getOwner = (req, res) => {
     const { ownerId } = req.params;
@@ -64,11 +71,24 @@ const updateOwner = (req, res) => {
     });
 };
 
+const addOwner = (req, res) => {
+    const owner = req.body;
+    const ownerId = `o${Date.now()}`;
+    // Only a shallow copy.
+    const addingOwner = { ownerId, ...owner };
+
+    createOwner(ownerId, addingOwner)
+    .then(() => {
+        res.status(201).send({ owner: addingOwner });
+    });
+};
+
 module.exports = {
     getOwner,
     getAllOwners,
     getOwnerPets,
     getAllPets,
     getPet,
-    updateOwner
+    updateOwner,
+    addOwner
 };

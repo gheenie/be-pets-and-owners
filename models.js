@@ -56,10 +56,15 @@ const fetchPet = petId => {
     });
 };
 
+const createOwner = (ownerId, addingOwner) => {
+    return fs.writeFile(`${__dirname}/data/owners/${ownerId}.json`, JSON.stringify(addingOwner));
+};
+
 module.exports = {
     fetchOwner,
     fetchAllOwners,
     fetchOwnerPets,
     fetchAllPets,
-    fetchPet
+    fetchPet,
+    createOwner
 }

@@ -6,7 +6,8 @@ const {
     getOwnerPets, 
     getAllPets, 
     getPet, 
-    updateOwner 
+    updateOwner, 
+    addOwner
 } = require('./controllers');
 
 const app = express();
@@ -24,17 +25,7 @@ app.get('/api/pets/:petId', getPet);
 
 app.patch('/api/owners/:ownerId', updateOwner);
 
-app.post('/api/owners', (req, res) => {
-    const owner = req.body;
-    const ownerId = `o${Date.now()}`;
-    // Only a shallow copy.
-    const addingOwner = { ownerId, ...owner };
-
-    fs.writeFile(`${__dirname}/data/owners/${ownerId}.json`, JSON.stringify(addingOwner))
-    .then(() => {
-        res.status(201).send({ owner: addingOwner });
-    });
-});
+app.post('/api/owners', addOwner);
 
 // Refactor to use catch?
 app.post('/api/owners/:id/pets', (req, res) => {
