@@ -4,6 +4,17 @@ const controllers = require('./controllers');
 
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+    let logContents = '';
+    
+    logContents += 'Request Type: ' + req.method + '\n';
+    logContents += 'Request URL: ' + req.originalUrl + '\n';
+    logContents += 'Time: ' + Date.now() + '\n\n';
+
+    fs.appendFile(`${__dirname}/log.txt`, logContents);
+
+    next();
+})
 
 app.get('/api/owners/:ownerId', controllers.getOwner);
 

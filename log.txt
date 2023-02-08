@@ -1,0 +1,14 @@
+Request Type: GET
+Request URL: /api/owners/o3
+Time: 1675865805539
+Request Type: GET
+Request URL: /api/owners/o3
+Time: 1675865806813
+Request Type: GET
+Request URL: /api/owners/o3
+Time: 1675865829152
+
+Request Type: GET
+Request URL: /api/owners/o3
+Time: 1675865829456
+
