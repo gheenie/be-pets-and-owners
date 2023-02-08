@@ -49,9 +49,17 @@ const fetchAllPets = temperament => {
     });
 };
 
+const fetchPet = petId => {
+    return fs.readFile(`${__dirname}/data/pets/${petId}.json`)
+    .then(pet => {
+        return JSON.parse(pet);
+    });
+};
+
 module.exports = {
     fetchOwner,
     fetchAllOwners,
     fetchOwnerPets,
-    fetchAllPets
+    fetchAllPets,
+    fetchPet
 }

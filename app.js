@@ -1,11 +1,11 @@
 const express = require('express');
 const fs = require('fs/promises');
-const { getOwners, getAllOwners, getOwnerPets, getAllPets } = require('./controllers');
+const { getOwner, getAllOwners, getOwnerPets, getAllPets, getPet } = require('./controllers');
 
 const app = express();
 app.use(express.json());
 
-app.get('/api/owners/:ownerId', getOwners);
+app.get('/api/owners/:ownerId', getOwner);
 
 app.get('/api/owners', getAllOwners);
 
@@ -13,16 +13,7 @@ app.get('/api/owners/:ownerId/pets', getOwnerPets);
 
 app.get('/api/pets', getAllPets);
 
-app.get('/api/pets/:petId', (req, res) => {
-    const { petId } = req.params;
-    
-    fs.readFile(`${__dirname}/data/pets/${petId}.json`)
-    .then(pet => {
-        const parsedPet = JSON.parse(pet);
-        
-        res.status(200).send({ pet: parsedPet });
-    });
-});
+app.get('/api/pets/:petId', getPet);
 
 app.patch('/api/owners/:ownerId', (req, res) => {
     const { ownerId } = req.params;

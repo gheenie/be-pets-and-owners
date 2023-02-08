@@ -1,6 +1,6 @@
-const { fetchOwner, fetchAllOwners, fetchOwnerPets, fetchAllPets } = require('./models');
+const { fetchOwner, fetchAllOwners, fetchOwnerPets, fetchAllPets, fetchPet } = require('./models');
 
-const getOwners = (req, res) => {
+const getOwner = (req, res) => {
     const { ownerId } = req.params;
     
     fetchOwner(ownerId)
@@ -39,9 +39,19 @@ const getAllPets = (req, res) =>{
     });
 };
 
+const getPet = (req, res) => {
+    const { petId } = req.params;
+    
+    fetchPet(petId)
+    .then(parsedPet => {
+        res.status(200).send({ pet: parsedPet });
+    });
+};
+
 module.exports = {
-    getOwners,
+    getOwner,
     getAllOwners,
     getOwnerPets,
-    getAllPets
+    getAllPets,
+    getPet
 };
