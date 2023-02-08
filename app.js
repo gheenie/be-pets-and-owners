@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs/promises');
-const { getOwners, getAllOwners } = require('./controllers');
+const { getOwners, getAllOwners, getOwnerPets, getAllPets } = require('./controllers');
 
 const app = express();
 app.use(express.json());
@@ -9,48 +9,9 @@ app.get('/api/owners/:ownerId', getOwners);
 
 app.get('/api/owners', getAllOwners);
 
-app.get('/api/owners/:ownerId/pets', (req, res) =>{
-    const { ownerId } = req.params
+app.get('/api/owners/:ownerId/pets', getOwnerPets);
 
-    fs.readdir(`${__dirname}/data/pets`)
-    .then(filesOfPets => {
-        const promisesToReadPets = filesOfPets.map(fileOfPet => {
-            return fs.readFile(`${__dirname}/data/pets/${fileOfPet}`);
-        });
-        
-        return Promise.all(promisesToReadPets);
-    })
-    .then(readPets => {
-        const pets = readPets.map(readPet => JSON.parse(readPet));
-        
-        const ownerPets = pets.filter(pet => pet.owner === ownerId);
-        
-        res.status(200).send({ pets : ownerPets });
-    });
-});
-
-app.get('/api/pets', (req, res) =>{
-    const { temperament } = req.query;
-
-    fs.readdir(`${__dirname}/data/pets`)
-    .then(filesOfPets => {
-        const promisesToReadPets = filesOfPets.map(fileOfPet => {
-            return fs.readFile(`${__dirname}/data/pets/${fileOfPet}`);
-        });
-        
-        return Promise.all(promisesToReadPets);
-    })
-    .then(readPets => {
-        const pets = readPets.map(readPet => JSON.parse(readPet));
-
-        //if (temperament !== undefined) ?
-        const queriedPets = pets.filter(pet => pet.temperament === temperament);
-        
-        res.status(200).send({ pets : queriedPets });
-
-        //default logic?
-    });
-});
+app.get('/api/pets', getAllPets);
 
 app.get('/api/pets/:petId', (req, res) => {
     const { petId } = req.params;

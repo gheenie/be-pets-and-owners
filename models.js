@@ -21,7 +21,37 @@ const fetchAllOwners = () => {
     });
 };
 
+const fetchOwnerPets = ownerId => {
+    return fs.readdir(`${__dirname}/data/pets`)
+    .then(filesOfPets => {
+        const promisesToReadPets = filesOfPets.map(fileOfPet => {
+            return fs.readFile(`${__dirname}/data/pets/${fileOfPet}`);
+        });
+        
+        return Promise.all(promisesToReadPets);
+    })
+    .then(readPets => {
+        const pets = readPets.map(readPet => JSON.parse(readPet));
+        
+        return pets.filter(pet => pet.owner === ownerId);
+    });
+};
+
+const fetchAllPets = temperament => {
+    return fs.readdir(`${__dirname}/data/pets`)
+    .then(filesOfPets => {
+        const promisesToReadPets = filesOfPets.map(fileOfPet => {
+            return fs.readFile(`${__dirname}/data/pets/${fileOfPet}`)
+            .then(readPet => JSON.parse(readPet));
+        });
+        
+        return Promise.all(promisesToReadPets);
+    });
+};
+
 module.exports = {
     fetchOwner,
-    fetchAllOwners
+    fetchAllOwners,
+    fetchOwnerPets,
+    fetchAllPets
 }
