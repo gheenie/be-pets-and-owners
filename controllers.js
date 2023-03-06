@@ -22,9 +22,7 @@ const getOwnerPets = (req, res) => {
 
     models.fetchAllPets()
     .then(pets => {
-        const ownerPets = ld.cloneDeep(pets);
-
-        ownerPets = pets.filter(pet => pet.owner === ownerId);
+        const ownerPets = pets.filter(pet => pet.owner === ownerId);
         
         res.status(200).send({ ownerPets });
     });
